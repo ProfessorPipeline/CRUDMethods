@@ -2,26 +2,199 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="pico.min.css">
-  <title>Hello Salties</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pico.min.css">
+    <title>Hello Salties</title>
+    <style>
+        /* Dark theme styles */
+        .main-container {
+            max-height: 100vh;
+            overflow-y: auto;
+        }
 
-  <!-- This script loads text from the Back-End! 
-       You can move it to a seperate JavaScript file if you want!-->
-  <script type="module">
-    const text = await fetch("http://localhost:5117")
-      .then(response => response.text())
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
 
-    const newElement = document.createElement("h2");
-    newElement.append(text);
-    document.body.appendChild(newElement);
-  </script>
+        h1, h2 {
+            color: #f1c40f;
+            animation: fadeIn 2s;
+        }
 
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #333;
+            color: #fff;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #444;
+        }
+
+        tr:hover {
+            background-color: #555;
+        }
+
+        .symbol {
+            display: inline-block;
+            animation: rotate 5s linear infinite;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        div {
+            margin-top: 20px;
+        }
+
+        input {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #555;
+            color: #fff;
+        }
+
+        /* Zigzag flying emoji animation */
+        .bizarre-emoji {
+            position: fixed;
+            font-size: 3em;
+            animation: zigzag 1s infinite;
+            pointer-events: none; /* Disable interaction */
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zigzag {
+            0% {
+                top: 0;
+                left: 0;
+            }
+            25% {
+                top: 10%;
+                left: 90%;
+            }
+            50% {
+                top: 50%;
+                left: 10%;
+            }
+            75% {
+                top: 90%;
+                left: 90%;
+            }
+            100% {
+                top: 100%;
+                left: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <h1>This is your frontend!</h1>
+    <div class="loading-container">
+        <p>Wait for this page to load...</p>
+        <div class="progress-indeterminate"></div>
+    </div>
+
+    <h1>Welcome to my first fullstack project</h1>
+    <h2 id="backend-message"></h2>
+    <div class="main-container">
+        <table id="items-list">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div>
+            <input type="text" id="crypto-symbol" placeholder="Symbol" />
+            <input type="text" id="crypto-name" placeholder="Name" />
+            <input type="text" id="crypto-description" placeholder="Description" />
+            <input type="number" id="crypto-price" placeholder="Price" />
+            <button id="add-item">Add Item</button>
+        </div>
+        <button onclick="location.href='webApi.html'">Check out current market</button>
+    </div>
+    <div class="bizarre-emoji">👻👻👻</div>
+    <script type="module">
+        const text = await fetch("http://localhost:5117")
+            .then(response => response.text());
+
+        const backendMessageElement = document.getElementById("backend-message");
+        backendMessageElement.textContent = text;
+
+        // Hide loading container after loading
+        document.querySelector('.loading-container').style.display = 'none';
+    </script>
+    <script src="script.js"></script>
+    <script>
+        // Function to set a random position for the emoji within the viewport
+        function setRandomPosition(element) {
+            const x = Math.random() * (window.innerWidth - element.clientWidth);
+            const y = Math.random() * (window.innerHeight - element.clientHeight);
+            element.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // Get the emoji element
+        const emoji = document.querySelector('.bizarre-emoji');
+
+        // Move the emoji to a new random position every 2 seconds
+        setInterval(() => setRandomPosition(emoji), 2000);
+    </script>
 </body>
 
 </html>
